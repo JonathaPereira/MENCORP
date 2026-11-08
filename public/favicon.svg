@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <defs>
+    <linearGradient id="mencorp-bg" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#130d24" />
+      <stop offset="55%" stop-color="#090910" />
+      <stop offset="100%" stop-color="#1c1236" />
+    </linearGradient>
+    <linearGradient id="mencorp-stroke" x1="8" y1="8" x2="56" y2="56" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#a855f7" />
+      <stop offset="60%" stop-color="#7c3aed" />
+      <stop offset="100%" stop-color="#f59e0b" />
+    </linearGradient>
+  </defs>
+  <rect x="3" y="3" width="58" height="58" rx="16" fill="url(#mencorp-bg)" stroke="url(#mencorp-stroke)" stroke-width="2.5" />
+  <path d="M15 44V20H21.5L30 33.5L38.5 20H45V44H39V29.5L31.5 41H28.5L21 29.5V44H15Z" fill="#FAFAFA" />
+  <rect x="46" y="18" width="4.5" height="4.5" rx="1" fill="#c084fc" />
+  <rect x="50.5" y="13.5" width="4.5" height="4.5" rx="1" fill="#f59e0b" />
+</svg>
