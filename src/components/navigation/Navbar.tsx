@@ -117,17 +117,19 @@ export const Navbar: React.FC<NavbarProps> = ({ activeSection, onNavigate }) => 
               <span>Acesso Rápido</span>
             </button>
 
-            <button
-              id="nav-explore-btn"
-              type="button"
-              onClick={() => handleNavClick('games')}
+            <a
+              id="nav-master-trono-btn"
+              href={MENCORP_CONFIG.links.mnTronoMaster}
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold text-white bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-500 hover:to-purple-500 border border-violet-400/30 shadow-[0_0_24px_-6px_rgba(139,92,246,0.65)] transition-all"
             >
               <Gamepad2 className="w-4 h-4 text-amber-300" />
-              <span>Universo Games</span>
-            </button>
+              <span>Abrir MN Trono</span>
+              <ExternalLink className="w-3.5 h-3.5" />
+            </a>
 
-            {/* Quick Access Popover */}
+            {/* Quick Access Popover — Direct Links to Sites & Games */}
             <AnimatePresence>
               {quickHubOpen && (
                 <motion.div
@@ -140,7 +142,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeSection, onNavigate }) => 
                   <div className="flex items-center justify-between pb-2.5 mb-3 border-b border-white/10">
                     <span className="text-xs font-mono uppercase tracking-wider text-violet-300 flex items-center gap-1.5">
                       <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-                      Links Diretos MeNCorp
+                      Páginas &amp; Jogos Oficiais
                     </span>
                     <button
                       type="button"
@@ -154,20 +156,37 @@ export const Navbar: React.FC<NavbarProps> = ({ activeSection, onNavigate }) => 
 
                   <div className="space-y-2 text-left">
                     <a
-                      href={MENCORP_CONFIG.links.menChatLive}
+                      href={MENCORP_CONFIG.links.mnTronoMaster}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center justify-between p-2.5 rounded-xl bg-white/[0.03] hover:bg-violet-500/15 border border-white/5 hover:border-violet-500/30 transition-all group"
+                      className="flex items-center justify-between p-2.5 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 border border-amber-400/30 transition-all group"
                     >
                       <div>
-                        <p className="text-xs font-semibold text-white group-hover:text-violet-200">
-                          MenChat (Aplicação Web)
+                        <p className="text-xs font-semibold text-amber-200 group-hover:text-white">
+                          MN Trono · Link Master
                         </p>
-                        <p className="text-[11px] text-zinc-400">
-                          Comunicação e comunidade online
+                        <p className="text-[11px] text-zinc-300">
+                          App de comunicação, voz P2P e todos os jogos
                         </p>
                       </div>
-                      <ExternalLink className="w-3.5 h-3.5 text-zinc-400 group-hover:text-violet-300" />
+                      <ExternalLink className="w-3.5 h-3.5 text-amber-300" />
+                    </a>
+
+                    <a
+                      href={MENCORP_CONFIG.links.cinzasLive}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center justify-between p-2.5 rounded-xl bg-white/[0.03] hover:bg-orange-500/15 border border-white/5 hover:border-orange-500/30 transition-all group"
+                    >
+                      <div>
+                        <p className="text-xs font-semibold text-white group-hover:text-orange-200">
+                          Cinzas do Abismo
+                        </p>
+                        <p className="text-[11px] text-zinc-400">
+                          Jogar demo roguelite no navegador
+                        </p>
+                      </div>
+                      <ExternalLink className="w-3.5 h-3.5 text-zinc-400 group-hover:text-orange-300" />
                     </a>
 
                     <a
@@ -181,31 +200,14 @@ export const Navbar: React.FC<NavbarProps> = ({ activeSection, onNavigate }) => 
                           Atalaia: Guardiões do Cristal
                         </p>
                         <p className="text-[11px] text-zinc-400">
-                          Versão web jogável publicada
+                          Jogar Tower Defense no navegador
                         </p>
                       </div>
                       <ExternalLink className="w-3.5 h-3.5 text-zinc-400 group-hover:text-sky-300" />
                     </a>
 
                     <a
-                      href={MENCORP_CONFIG.links.menTronoRepo || '#'}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center justify-between p-2.5 rounded-xl bg-white/[0.03] hover:bg-amber-500/15 border border-white/5 hover:border-amber-500/30 transition-all group"
-                    >
-                      <div>
-                        <p className="text-xs font-semibold text-white group-hover:text-amber-200">
-                          Men Trono · A Lei do Trono
-                        </p>
-                        <p className="text-[11px] text-zinc-400">
-                          Plataforma estratégica &amp; A Corte
-                        </p>
-                      </div>
-                      <ExternalLink className="w-3.5 h-3.5 text-zinc-400 group-hover:text-amber-300" />
-                    </a>
-
-                    <a
-                      href={MENCORP_CONFIG.links.nexusRepo || '#'}
+                      href={MENCORP_CONFIG.links.nexusLive}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="flex items-center justify-between p-2.5 rounded-xl bg-white/[0.03] hover:bg-purple-500/15 border border-white/5 hover:border-purple-500/30 transition-all group"
@@ -215,10 +217,27 @@ export const Navbar: React.FC<NavbarProps> = ({ activeSection, onNavigate }) => 
                           Nexus · Ecos do Crepúsculo
                         </p>
                         <p className="text-[11px] text-zinc-400">
-                          RPG tático &amp; Arena PvP
+                          Página oficial do RPG tático
                         </p>
                       </div>
                       <ExternalLink className="w-3.5 h-3.5 text-zinc-400 group-hover:text-purple-300" />
+                    </a>
+
+                    <a
+                      href={MENCORP_CONFIG.links.menChatLive}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center justify-between p-2.5 rounded-xl bg-white/[0.03] hover:bg-violet-500/15 border border-white/5 hover:border-violet-500/30 transition-all group"
+                    >
+                      <div>
+                        <p className="text-xs font-semibold text-white group-hover:text-violet-200">
+                          MenChat (Aplicação Web)
+                        </p>
+                        <p className="text-[11px] text-zinc-400">
+                          Mensagens e grupos privados
+                        </p>
+                      </div>
+                      <ExternalLink className="w-3.5 h-3.5 text-zinc-400 group-hover:text-violet-300" />
                     </a>
                   </div>
                 </motion.div>
@@ -274,14 +293,16 @@ export const Navbar: React.FC<NavbarProps> = ({ activeSection, onNavigate }) => 
               </div>
 
               <div className="mt-4 pt-4 border-t border-white/10 grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                <button
-                  type="button"
-                  onClick={() => handleNavClick('plataformas')}
-                  className="flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-xs font-semibold text-violet-200 bg-violet-950/60 border border-violet-500/30"
+                <a
+                  href={MENCORP_CONFIG.links.mnTronoMaster}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-xs font-semibold text-slate-950 bg-gradient-to-r from-amber-400 to-amber-500"
                 >
-                  <Layers className="w-4 h-4 text-violet-400" />
-                  <span>Ver Plataformas</span>
-                </button>
+                  <Layers className="w-4 h-4" />
+                  <span>Abrir MN Trono</span>
+                  <ExternalLink className="w-3.5 h-3.5" />
+                </a>
                 <button
                   type="button"
                   onClick={() => handleNavClick('games')}

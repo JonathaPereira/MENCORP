@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
   CheckCircle2,
-  Code2,
   ExternalLink,
   Eye,
   Sparkles,
@@ -232,15 +231,15 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({
                     </span>
                   )}
 
-                  {selected.item.repositoryUrl && (
+                  {selected.item.secondaryAction && (
                     <a
-                      href={selected.item.repositoryUrl}
+                      href={selected.item.secondaryAction.url}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="inline-flex items-center gap-2 px-4 py-3 rounded-xl text-xs font-mono uppercase tracking-wider text-zinc-200 bg-white/5 hover:bg-white/10 border border-white/10 transition-colors"
                     >
-                      <Code2 className="w-4 h-4 text-violet-400" />
-                      <span>Repositório Oficial</span>
+                      <span>{selected.item.secondaryAction.label}</span>
+                      <ExternalLink className="w-3.5 h-3.5 text-amber-400" />
                     </a>
                   )}
                 </div>

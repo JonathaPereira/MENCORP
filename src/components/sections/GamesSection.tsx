@@ -221,18 +221,32 @@ const OriginalGameShowcase: React.FC<{
 
           {/* Action Buttons */}
           <div className="pt-5 border-t border-white/10 flex flex-wrap items-center justify-between gap-3">
-            {game.primaryAction.url && (
-              <a
-                id={`game-cta-${game.id}`}
-                href={game.primaryAction.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={`inline-flex items-center gap-2 px-5 py-3 rounded-xl text-xs sm:text-sm font-semibold transition-all ${game.visualIdentity.buttonStyle}`}
-              >
-                <span>{game.primaryAction.label}</span>
-                <ExternalLink className="w-4 h-4" />
-              </a>
-            )}
+            <div className="flex flex-wrap items-center gap-2.5">
+              {game.primaryAction.url && (
+                <a
+                  id={`game-cta-${game.id}`}
+                  href={game.primaryAction.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`inline-flex items-center gap-2 px-5 py-3 rounded-xl text-xs sm:text-sm font-semibold transition-all ${game.visualIdentity.buttonStyle}`}
+                >
+                  <span>{game.primaryAction.label}</span>
+                  <ExternalLink className="w-4 h-4" />
+                </a>
+              )}
+
+              {game.secondaryAction && (
+                <a
+                  href={game.secondaryAction.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 px-3.5 py-3 rounded-xl text-xs font-mono text-amber-200 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-400/30 transition-all"
+                >
+                  <span>{game.secondaryAction.label}</span>
+                  <ExternalLink className="w-3.5 h-3.5" />
+                </a>
+              )}
+            </div>
 
             <button
               id={`game-inspect-${game.id}`}
@@ -241,7 +255,7 @@ const OriginalGameShowcase: React.FC<{
               className="inline-flex items-center gap-2 px-4 py-3 rounded-xl text-xs font-mono uppercase tracking-wider text-zinc-200 bg-white/[0.05] hover:bg-white/[0.12] border border-white/15 transition-all"
             >
               <Eye className="w-4 h-4" />
-              <span>Inspecionar Universo</span>
+              <span>Galeria</span>
             </button>
           </div>
         </div>
@@ -320,15 +334,15 @@ export const GamesSection: React.FC<GamesSectionProps> = ({ onInspect }) => {
                   </span>
                 </div>
                 <h3 className="font-display font-bold text-2xl sm:text-3xl text-white tracking-tight">
-                  Jogos Incorporados, Publicados e Adaptações no Ecossistema
+                  Jogos Incorporados, Publicados e Adaptações no MN Trono
                 </h3>
               </div>
               <p className="text-sm text-zinc-400 max-w-xl leading-relaxed">
                 Separados claramente das criações autorais do{' '}
                 <strong className="text-zinc-200">MeNCorp Games</strong>, esta área
-                reúne adaptações digitais integradas aos salões multiplayer (como{' '}
-                <em>A Corte / Men Trono</em>) e mantém estrutura modular pronta para
-                a inclusão de novos títulos publicados ou distribuídos.
+                reúne adaptações digitais integradas aos salões multiplayer do{' '}
+                <strong className="text-amber-300">MN Trono</strong> e mantém
+                estrutura modular pronta para a inclusão de novos títulos.
               </p>
             </div>
           </Reveal>
@@ -407,9 +421,21 @@ export const GamesSection: React.FC<GamesSectionProps> = ({ onInspect }) => {
                             </span>
                           ))}
                         </div>
-                        <span className="text-[10px] font-mono text-violet-300">
-                          {item.hostPlatform}
-                        </span>
+                        {item.playUrl ? (
+                          <a
+                            href={item.playUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1 text-xs font-mono text-amber-300 hover:text-amber-200 transition-colors"
+                          >
+                            <span>Abrir no {item.hostPlatform}</span>
+                            <ExternalLink className="w-3 h-3" />
+                          </a>
+                        ) : (
+                          <span className="text-[10px] font-mono text-violet-300">
+                            {item.hostPlatform}
+                          </span>
+                        )}
                       </div>
                     </>
                   )}

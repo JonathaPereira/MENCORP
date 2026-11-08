@@ -15,7 +15,7 @@ export interface MediaAsset {
 export interface ConfigurableLink {
   id: string;
   label: string;
-  url: string | null; // null or empty means configurable / pending definition
+  url: string | null;
   configKey: string;
   description: string;
   badge: string;
@@ -43,7 +43,10 @@ export interface PlatformItem {
     url: string | null;
     configKey: string;
   };
-  repositoryUrl: string | null;
+  secondaryAction?: {
+    label: string;
+    url: string;
+  };
   ecosystemRole: string;
   techHighlights: string[];
 }
@@ -79,7 +82,10 @@ export interface OriginalGameItem {
     url: string | null;
     configKey: string;
   };
-  repositoryUrl: string | null;
+  secondaryAction?: {
+    label: string;
+    url: string;
+  };
 }
 
 export interface IncorporatedGameItem {
@@ -91,6 +97,7 @@ export interface IncorporatedGameItem {
   coverImage?: string;
   tags: string[];
   hostPlatform: string;
+  playUrl?: string;
   isTemplateSlot?: boolean;
 }
 
@@ -129,8 +136,7 @@ export interface RoadmapInitiative {
 
 /**
  * CONFIGURAÇÃO CENTRALIZADA DE LINKS DO ECOSSISTEMA MENCORP
- * Endereços reais já publicados estão preenchidos; canais futuros permanecem
- * preparados e configuráveis sem apontar para links fictícios.
+ * Direcionando diretamente para as páginas dos jogos e plataformas publicadas.
  */
 export const MENCORP_CONFIG = {
   brand: {
@@ -139,6 +145,34 @@ export const MENCORP_CONFIG = {
     heroDescription:
       'O MeNCorp nasceu da paixão por tecnologia, jogos e criatividade. Uma jornada construída através de ideias, experiências e projetos que transformam imaginação em realidade. Criamos, desenvolvemos, conectamos e evoluímos.',
     aboutHeadline: 'Uma ideia. Muitos universos.',
+    biography: {
+      badge: 'A VERDADEIRA HISTÓRIA · DE MEMES E NERDS A MENCORP',
+      title: 'Como um card game entre amigos escalou para um ecossistema inteiro.',
+      paragraph1:
+        'Tudo começou em um dia qualquer, quando o criador Jonatha Pereira decidiu desenvolver um card game autoral chamado "A Lei do Trono" e criar um ambiente web para testá-lo online. No entanto, as coisas foram escalando rapidamente: da necessidade de criar um chat de voz P2P para explicar as regras do jogo durante os testes, nasceu um projeto super completo de comunicação, com vários jogos integrados e compartilhamento de tela.',
+      paragraph2:
+        'O site crescia a todo vapor, mas ainda de forma desordenada e em meio a uma bagunça estrutural. Foi então que um dos membros do MeNCorp, Felipe Pimentel, decidiu liderar uma profunda refatoração de código e reformular seu design por completo. Desde esse marco, toda a equipe primordial dos Memes e Nerds passou a testar ativamente cada função e sugerir mudanças que moldaram o ecossistema atual.',
+      keyPeople: [
+        {
+          name: 'Jonatha Pereira',
+          role: 'Criador & Idealizador',
+          detail:
+            'Criou "A Lei do Trono", o ambiente web inicial, o chat de voz P2P e a expansão para múltiplos jogos.',
+        },
+        {
+          name: 'Felipe Pimentel',
+          role: 'Refatoração & Direção de Design',
+          detail:
+            'Reestruturou a arquitetura de código e transformou o design inteiro da plataforma.',
+        },
+        {
+          name: 'Equipe Primordial Memes e Nerds',
+          role: 'Testes, Ideias & Evolução',
+          detail:
+            'Núcleo fundador que testa, valida e sugere melhorias contínuas em cada projeto.',
+        },
+      ],
+    },
     futureHeadline: 'Estamos apenas começando.',
     futureDescription:
       'O MeNCorp continua evoluindo. Novos jogos, novas plataformas, novas ideias e experiências estão sendo construídas. Cada projeto representa mais um passo de uma jornada que está longe de terminar.',
@@ -146,21 +180,20 @@ export const MENCORP_CONFIG = {
     communityDescription:
       'Conheça nossos projetos, descubra nossos universos e acompanhe tudo o que estamos construindo.',
     footerClosing: 'MeNCorp — Criando. Conectando. Evoluindo.',
-    logoAsset: '/assets/brand/men-logo.webp',
+    logoAsset: 'assets/brand/men-logo.webp',
   },
   links: {
-    githubOrg: 'https://github.com/JonathaPereira',
-    mencorpRepo: 'https://github.com/JonathaPereira/MENCORP',
-    menChatLive: 'https://men-chat.vercel.app',
-    menChatRepo: 'https://github.com/JonathaPereira/MeN-CHAT',
-    menTronoRepo: 'https://github.com/JonathaPereira/A-LEI-DO-TRONO-SERVER',
-    menTronoDownloads: 'https://github.com/JonathaPereira/MN-Trono-Downloads',
+    // Link Master do MN Trono (App de comunicação + Hub central dos jogos)
+    mnTronoMaster: 'https://a-lei-do-trono.surge.sh',
+    // Links diretos das páginas dos jogos e plataformas
+    cinzasLive: 'https://a-lei-do-trono.surge.sh/roguelite/index.html',
     atalaiaLive: 'https://atalaia-mn.surge.sh',
-    nexusRepo: 'https://github.com/JonathaPereira/PROJETO-NEXUS',
-    // Campos configuráveis para canais comunitários e institucionais (sem URLs fictícias)
+    nexusLive: 'https://semchakra10.itch.io/nexus-mn',
+    menChatLive: 'https://men-chat.vercel.app',
+    // Campos configuráveis para canais comunitários e institucionais
     discordInvite: null as string | null,
     youtubeChannel: null as string | null,
-    instagramOrX: null as string | null,
+    socialChannel: 'https://a-lei-do-trono.surge.sh',
     contactEmail: null as string | null,
   },
 };
@@ -186,7 +219,7 @@ export const ABOUT_PILLARS = [
     id: 'communities-comm',
     title: 'Comunidades e comunicação',
     description:
-      'Ambientes dedicados para aproximar pessoas através de conversas, salas de voz, vídeo, compartilhamento de tela e convivência digital.',
+      'Ambientes dedicados para aproximar pessoas através de conversas, salas de voz P2P, vídeo, compartilhamento de tela e convivência digital.',
     iconName: 'MessageSquareShare',
     accent: 'violet',
   },
@@ -219,18 +252,18 @@ export const ABOUT_PILLARS = [
 export const PLATFORMS_DATA: PlatformItem[] = [
   {
     id: 'men-trono',
-    name: 'MEN TRONO',
-    subtitle: 'Plataforma Digital · A Lei do Trono & A Corte',
-    tagline: 'Estratégia, política, alianças e disputas pelo poder em ambiente digital.',
+    name: 'MN TRONO',
+    subtitle: 'App de Comunicação & Hub Master de Jogos · A Lei do Trono',
+    tagline: 'Comunicação por voz P2P, compartilhamento de tela, estratégia e múltiplos jogos integrados.',
     description:
-      'Uma experiência que combina estratégia, política, alianças e disputas pelo poder. O Men Trono leva o universo de A Lei do Trono para o ambiente digital, permitindo que jogadores participem de partidas e vivenciem uma experiência estratégica multiplayer.',
+      'Uma experiência que combina estratégia, política, alianças, disputas pelo poder e comunicação em tempo real. O MN Trono é o nosso app de comunicação e hub master que leva o universo de A Lei do Trono e diversos outros jogos para o ambiente digital, unindo chat de voz P2P, compartilhamento de tela e partidas multiplayer.',
     highlights: [
-      'Jogo de tabuleiro online',
-      'Experiência multiplayer',
-      'Estratégia e interação entre jogadores',
-      'Desenvolvimento de uma experiência digital própria',
+      'App de comunicação com voz P2P e compartilhamento de tela',
+      'Jogo de tabuleiro e card game online (A Lei do Trono)',
+      'Experiência multiplayer com vários jogos no catálogo',
+      'Estratégia, alianças e interação direta entre jogadores',
     ],
-    status: 'Em evolução',
+    status: 'Disponível',
     theme: {
       accentHex: '#f59e0b',
       secondaryHex: '#8b5cf6',
@@ -241,15 +274,15 @@ export const PLATFORMS_DATA: PlatformItem[] = [
     },
     media: [
       {
-        src: '/assets/real/throne-cover.webp',
-        alt: 'Arte Oficial A Lei do Trono — Men Trono',
+        src: 'assets/real/throne-cover.webp',
+        alt: 'Arte Oficial A Lei do Trono — MN Trono',
         label: 'Arte Oficial do Projeto',
         kind: 'real',
-        caption: 'Identidade visual oficial da Corte e de A Lei do Trono no ecossistema MeNCorp.',
+        caption: 'Identidade visual oficial da Corte e de A Lei do Trono no MN Trono.',
       },
       {
-        src: '/assets/concept/men-trono-concept.webp',
-        alt: 'Arte Conceitual da Mesa Estratégica Digital Men Trono',
+        src: 'assets/concept/men-trono-concept.webp',
+        alt: 'Arte Conceitual da Mesa Estratégica Digital MN Trono',
         label: 'Arte Conceitual',
         kind: 'concept',
         caption:
@@ -257,18 +290,17 @@ export const PLATFORMS_DATA: PlatformItem[] = [
       },
     ],
     primaryAction: {
-      label: 'Acessar Repositório & Releases',
-      url: MENCORP_CONFIG.links.menTronoDownloads,
-      configKey: 'links.menTronoDownloads',
+      label: 'Acessar MN Trono & Jogos',
+      url: MENCORP_CONFIG.links.mnTronoMaster,
+      configKey: 'links.mnTronoMaster',
     },
-    repositoryUrl: MENCORP_CONFIG.links.menTronoRepo,
     ecosystemRole:
-      'Atua como o salão estratégico e hub central de jogos e convivência (Web, Desktop Electron e preparação Android), integrando partidas e catálogo.',
+      'Atua como o aplicativo central de comunicação (voz P2P, canais e tela compartilhada) e salão master onde os jogos do ecossistema se encontram.',
     techHighlights: [
-      'Salas multiplayer em tempo real',
-      'Hub integrado A Corte (Web & Desktop)',
-      'Sistema de leis, territórios e decretos',
-      'Catálogo conectado aos títulos MeNCorp',
+      'Chat de voz P2P & Compartilhamento de tela',
+      'Hub Master (a-lei-do-trono.surge.sh)',
+      'Partidas estratégicas em tempo real',
+      'Catálogo integrado de jogos MeNCorp',
     ],
   },
   {
@@ -296,7 +328,7 @@ export const PLATFORMS_DATA: PlatformItem[] = [
     },
     media: [
       {
-        src: '/assets/concept/menchat-concept.webp',
+        src: 'assets/concept/menchat-concept.webp',
         alt: 'Arte Conceitual da Interface de Comunidade e Voz do MenChat',
         label: 'Arte Conceitual da Plataforma',
         kind: 'concept',
@@ -309,14 +341,17 @@ export const PLATFORMS_DATA: PlatformItem[] = [
       url: MENCORP_CONFIG.links.menChatLive,
       configKey: 'links.menChatLive',
     },
-    repositoryUrl: MENCORP_CONFIG.links.menChatRepo,
+    secondaryAction: {
+      label: 'Abrir MN Trono',
+      url: MENCORP_CONFIG.links.mnTronoMaster,
+    },
     ecosystemRole:
-      'Conecta amigos, grupos e comunidades com acesso seguro, suporte a mídia rica, chamadas e integração com a rotina dos jogadores.',
+      'Conecta amigos, grupos e comunidades com acesso rápido, suporte a mídia rica, chamadas e integração com o dia a dia dos membros.',
     techHighlights: [
       'Web Responsiva & PWA instalável',
       'Conversas privadas, grupos e salas',
       'Áudio, vídeo, mídia e compartilhamento',
-      'Acesso por convite e identidade própria',
+      'Identidade própria Memes e Nerds',
     ],
   },
 ];
@@ -336,14 +371,14 @@ export const ORIGINAL_GAMES_DATA: OriginalGameItem[] = [
       'Progressão contínua',
       'Evolução do personagem e dos equipamentos',
     ],
-    status: 'Em evolução',
+    status: 'Disponível',
     visualIdentity: {
       themeName: 'Abismo Rubro & Cinzas',
       fontClass: 'font-epic',
-      primaryColor: '#f97316', // Ember Orange / Crimson
+      primaryColor: '#f97316',
       secondaryColor: '#dc2626',
       cardBgGradient:
-        'bg-gradient-to-br from-[#17090c] via-[#0d0814] to-[#07060b]',
+        'bg-gradient-to-br from-[#17090c]/95 via-[#0d0814]/95 to-[#07060b]/95',
       borderStyle: 'border-orange-500/30 hover:border-orange-400/60',
       glowStyle: 'shadow-[0_0_55px_-12px_rgba(234,88,12,0.32)]',
       badgeStyle: 'bg-orange-500/15 text-orange-300 border-orange-500/35',
@@ -353,28 +388,28 @@ export const ORIGINAL_GAMES_DATA: OriginalGameItem[] = [
     },
     media: [
       {
-        src: '/assets/real/cinzas-cover.webp',
+        src: 'assets/real/cinzas-cover.webp',
         alt: 'Arte Oficial de Catálogo — Cinzas do Abismo',
         label: 'Arte Oficial do Jogo',
         kind: 'real',
         caption: 'Arte oficial de catálogo de Cinzas do Abismo presente no ecossistema MeNCorp.',
       },
       {
-        src: '/assets/real/cinzas-forge.webp',
+        src: 'assets/real/cinzas-forge.webp',
         alt: 'Cenário Oficial — A Forja em Cinzas do Abismo',
         label: 'Ambiente do Jogo · Forja',
         kind: 'real',
         caption: 'Cenário original de Cinzas do Abismo: forja ancestral e evolução de arsenal.',
       },
       {
-        src: '/assets/real/cinzas-ruins.webp',
+        src: 'assets/real/cinzas-ruins.webp',
         alt: 'Cenário Oficial — Ruínas Abissais em Cinzas do Abismo',
         label: 'Ambiente do Jogo · Ruínas',
         kind: 'real',
         caption: 'Exploração de ruínas hostis e terrenos com efeitos dinâmicos.',
       },
       {
-        src: '/assets/concept/cinzas-concept.webp',
+        src: 'assets/concept/cinzas-concept.webp',
         alt: 'Arte Conceitual — O Andarilho diante do Abismo',
         label: 'Arte Conceitual',
         kind: 'concept',
@@ -385,12 +420,12 @@ export const ORIGINAL_GAMES_DATA: OriginalGameItem[] = [
       {
         label: 'Modos de Jornada',
         value: 'Expedição & Horda',
-        detail: 'Capítulos com guardiões e modo sobrevivência de ondas contínuas',
+        detail: '15 capítulos com guardiões e modo sobrevivência de ondas contínuas',
       },
       {
         label: 'Domínio Elemental',
         value: 'Fogo · Gelo · Raio · Veneno',
-        detail: 'Combinações táticas de cartas, relíquias e modificadores de arma',
+        detail: 'Combinações táticas de 36 cartas, relíquias e modificadores de arma',
       },
       {
         label: 'Progressão',
@@ -399,11 +434,14 @@ export const ORIGINAL_GAMES_DATA: OriginalGameItem[] = [
       },
     ],
     primaryAction: {
-      label: 'Ver Projeto no Ecossistema',
-      url: MENCORP_CONFIG.links.menTronoRepo,
-      configKey: 'links.menTronoRepo',
+      label: 'Jogar Cinzas do Abismo',
+      url: MENCORP_CONFIG.links.cinzasLive,
+      configKey: 'links.cinzasLive',
     },
-    repositoryUrl: MENCORP_CONFIG.links.menTronoRepo,
+    secondaryAction: {
+      label: 'Abrir no MN Trono',
+      url: MENCORP_CONFIG.links.mnTronoMaster,
+    },
   },
   {
     id: 'atalaia',
@@ -423,10 +461,10 @@ export const ORIGINAL_GAMES_DATA: OriginalGameItem[] = [
     visualIdentity: {
       themeName: 'Cristal Arcano & Bastião Dourado',
       fontClass: 'font-epic',
-      primaryColor: '#38bdf8', // Arcane Crystal Cyan
-      secondaryColor: '#f59e0b', // Bastion Gold
+      primaryColor: '#38bdf8',
+      secondaryColor: '#f59e0b',
       cardBgGradient:
-        'bg-gradient-to-br from-[#071521] via-[#0b0e1d] to-[#06060b]',
+        'bg-gradient-to-br from-[#071521]/95 via-[#0b0e1d]/95 to-[#06060b]/95',
       borderStyle: 'border-sky-400/35 hover:border-amber-400/60',
       glowStyle: 'shadow-[0_0_55px_-12px_rgba(56,189,248,0.3)]',
       badgeStyle: 'bg-sky-500/15 text-sky-300 border-sky-400/35',
@@ -436,7 +474,7 @@ export const ORIGINAL_GAMES_DATA: OriginalGameItem[] = [
     },
     media: [
       {
-        src: '/assets/real/atalaia-gameplay.webp',
+        src: 'assets/real/atalaia-gameplay.webp',
         alt: 'Captura Real de Gameplay — Atalaia: Guardiões do Cristal',
         label: 'Captura Real de Gameplay',
         kind: 'real',
@@ -444,7 +482,7 @@ export const ORIGINAL_GAMES_DATA: OriginalGameItem[] = [
           'Interface tática real de Atalaia: defesa do Núcleo de Cristal, telemetria de DPS em tempo real e doutrinas de torretas.',
       },
       {
-        src: '/assets/concept/atalaia-concept.webp',
+        src: 'assets/concept/atalaia-concept.webp',
         alt: 'Arte Conceitual — O Bastião de Atalaia e o Cristal Central',
         label: 'Arte Conceitual',
         kind: 'concept',
@@ -470,11 +508,14 @@ export const ORIGINAL_GAMES_DATA: OriginalGameItem[] = [
       },
     ],
     primaryAction: {
-      label: 'Jogar Atalaia na Web',
+      label: 'Jogar Atalaia Agora',
       url: MENCORP_CONFIG.links.atalaiaLive,
       configKey: 'links.atalaiaLive',
     },
-    repositoryUrl: MENCORP_CONFIG.links.menTronoRepo,
+    secondaryAction: {
+      label: 'Abrir no MN Trono',
+      url: MENCORP_CONFIG.links.mnTronoMaster,
+    },
   },
   {
     id: 'nexus',
@@ -490,14 +531,14 @@ export const ORIGINAL_GAMES_DATA: OriginalGameItem[] = [
       'Progressão e evolução',
       'Universo próprio',
     ],
-    status: 'Em desenvolvimento',
+    status: 'Em evolução',
     visualIdentity: {
       themeName: 'Sanctum Astral & Ecos do Crepúsculo',
       fontClass: 'font-display',
-      primaryColor: '#c084fc', // Twilight Violet
-      secondaryColor: '#06b6d4', // Sanctum Cyan
+      primaryColor: '#c084fc',
+      secondaryColor: '#06b6d4',
       cardBgGradient:
-        'bg-gradient-to-br from-[#130b24] via-[#091322] to-[#06060b]',
+        'bg-gradient-to-br from-[#130b24]/95 via-[#091322]/95 to-[#06060b]/95',
       borderStyle: 'border-purple-400/35 hover:border-cyan-400/60',
       glowStyle: 'shadow-[0_0_55px_-12px_rgba(192,132,252,0.34)]',
       badgeStyle: 'bg-purple-500/15 text-purple-200 border-purple-400/35',
@@ -507,35 +548,35 @@ export const ORIGINAL_GAMES_DATA: OriginalGameItem[] = [
     },
     media: [
       {
-        src: '/assets/real/nexus-cover.webp',
+        src: 'assets/real/nexus-cover.webp',
         alt: 'Arte Oficial — NEXUS: Ecos do Crepúsculo',
         label: 'Arte Oficial do Jogo',
         kind: 'real',
         caption: 'Arte oficial de NEXUS — Ecos do Crepúsculo apresentando Vesper e a arquitetura do Sanctum.',
       },
       {
-        src: '/assets/real/nexus-online.webp',
+        src: 'assets/real/nexus-online.webp',
         alt: 'Captura Real de Combate Tático 2D — NEXUS',
         label: 'Captura Real de Combate',
         kind: 'real',
         caption: 'Combate estratégico em turnos com gestão de vida, energia, escudo e sinergias entre heróis.',
       },
       {
-        src: '/assets/real/nexus-lobby.webp',
+        src: 'assets/real/nexus-lobby.webp',
         alt: 'Captura Real da Arena e Oficina de Gemas — NEXUS',
         label: 'Captura Real · Formação & Gemas',
         kind: 'real',
         caption: 'Preparação de trio tático com 20 personagens ativos, classes e engastes de gemas.',
       },
       {
-        src: '/assets/real/nexus-arena.webp',
+        src: 'assets/real/nexus-arena.webp',
         alt: 'Cenário Oficial da Arena Astral — NEXUS',
         label: 'Cenário Oficial · Sanctum',
         kind: 'real',
         caption: 'Arena do Eclipse no universo próprio de NEXUS.',
       },
       {
-        src: '/assets/concept/nexus-concept.webp',
+        src: 'assets/concept/nexus-concept.webp',
         alt: 'Arte Conceitual de Formação Tática — NEXUS',
         label: 'Arte Conceitual',
         kind: 'concept',
@@ -546,7 +587,7 @@ export const ORIGINAL_GAMES_DATA: OriginalGameItem[] = [
       {
         label: 'Formação & Elenco',
         value: 'Equipes Táticas & Classes',
-        detail: 'Sinergia entre tanques, causadores de dano, suporte e controle',
+        detail: '20 personagens ativos com sinergia entre tanques, dano, suporte e controle',
       },
       {
         label: 'Customização',
@@ -560,63 +601,65 @@ export const ORIGINAL_GAMES_DATA: OriginalGameItem[] = [
       },
     ],
     primaryAction: {
-      label: 'Explorar Projeto Nexus',
-      url: MENCORP_CONFIG.links.nexusRepo,
-      configKey: 'links.nexusRepo',
+      label: 'Jogar Nexus Online',
+      url: MENCORP_CONFIG.links.nexusLive,
+      configKey: 'links.nexusLive',
     },
-    repositoryUrl: MENCORP_CONFIG.links.nexusRepo,
+    secondaryAction: {
+      label: 'Abrir no MN Trono',
+      url: MENCORP_CONFIG.links.mnTronoMaster,
+    },
   },
 ];
 
-/**
- * JOGOS PUBLICADOS, DISTRIBUÍDOS OU INCORPORADOS AO ECOSSISTEMA
- * Separados claramente dos títulos autorais originais desenvolvidos pelo MeNCorp.
- * Estrutura extensível preparada para fácil adição de novos jogos.
- */
 export const INCORPORATED_GAMES_DATA: IncorporatedGameItem[] = [
   {
     id: 'splendor-trono',
-    title: 'Splendor · Adaptação Digital Integrada',
+    title: 'Splendor · Adaptação Digital no Trono',
     category: 'Adaptação Digital no Trono',
-    originNote: 'Clássico de tabuleiro incorporado ao catálogo multiplayer de A Corte',
+    originNote: 'Clássico de estratégia incorporado ao catálogo multiplayer do MN Trono',
     description:
-      'Experiência digitalizada e integrada aos salões de A Corte / Men Trono para partidas rápidas de estratégia econômica e coleção de gemas entre membros da comunidade.',
-    coverImage: '/assets/real/splendor-cover.webp',
-    tags: ['Tabuleiro Digital', 'Multiplayer', 'Catálogo A Corte'],
-    hostPlatform: 'Men Trono / A Corte',
+      'Experiência digitalizada e integrada aos salões do MN Trono para partidas rápidas de estratégia econômica e coleção de gemas com voz P2P integrada.',
+    coverImage: 'assets/real/splendor-cover.webp',
+    tags: ['Tabuleiro Digital', 'Multiplayer', 'Salão MN Trono'],
+    hostPlatform: 'MN Trono',
+    playUrl: MENCORP_CONFIG.links.mnTronoMaster,
   },
   {
     id: 'azul-trono',
-    title: 'Azul · Adaptação Digital Integrada',
+    title: 'Azul · Adaptação Digital no Trono',
     category: 'Adaptação Digital no Trono',
-    originNote: 'Clássico abstrato incorporado ao catálogo multiplayer de A Corte',
+    originNote: 'Clássico abstrato incorporado ao catálogo multiplayer do MN Trono',
     description:
-      'Implementação digital interativa integrada à plataforma Men Trono, com suporte a salas online, regras automatizadas e placar sincronizado.',
-    coverImage: '/assets/real/azul-cover.webp',
-    tags: ['Estratégia Abstrata', 'Multiplayer', 'Catálogo A Corte'],
-    hostPlatform: 'Men Trono / A Corte',
+      'Implementação digital interativa integrada à plataforma MN Trono, com suporte a salas online, regras automatizadas e placar sincronizado.',
+    coverImage: 'assets/real/azul-cover.webp',
+    tags: ['Estratégia Abstrata', 'Multiplayer', 'Salão MN Trono'],
+    hostPlatform: 'MN Trono',
+    playUrl: MENCORP_CONFIG.links.mnTronoMaster,
   },
   {
     id: 'ticket-to-ride-trono',
-    title: 'Ticket to Ride · Adaptação Digital Integrada',
+    title: 'Ticket to Ride · Adaptação Digital no Trono',
     category: 'Adaptação Digital no Trono',
-    originNote: 'Jogo de rotas ferroviárias incorporado ao salão digital de A Corte',
+    originNote: 'Jogo de rotas ferroviárias incorporado ao salão digital do MN Trono',
     description:
-      'Versão digital conectada ao ecossistema Men Trono para disputas estratégicas de rotas e objetivos em partidas com amigos.',
-    coverImage: '/assets/real/ticket-to-ride-cover.webp',
-    tags: ['Rotas & Estratégia', 'Multiplayer', 'Catálogo A Corte'],
-    hostPlatform: 'Men Trono / A Corte',
+      'Versão digital conectada ao ecossistema MN Trono para disputas estratégicas de rotas e objetivos em partidas com amigos.',
+    coverImage: 'assets/real/ticket-to-ride-cover.webp',
+    tags: ['Rotas & Estratégia', 'Multiplayer', 'Salão MN Trono'],
+    hostPlatform: 'MN Trono',
+    playUrl: MENCORP_CONFIG.links.mnTronoMaster,
   },
   {
     id: 'love-letter-similo-trono',
     title: 'Love Letter & Similo · Salão Casual',
     category: 'Adaptação Digital no Trono',
-    originNote: 'Experiências de dedução e cartas incorporadas ao ambiente A Corte',
+    originNote: 'Experiências de dedução e cartas incorporadas ao MN Trono',
     description:
-      'Partidas ágeis de dedução social e cooperação incorporadas diretamente à infraestrutura de salas e chamadas do ecossistema.',
-    coverImage: '/assets/real/love-letter-cover.webp',
-    tags: ['Dedução & Cartas', 'Partidas Rápidas', 'Catálogo A Corte'],
-    hostPlatform: 'Men Trono / A Corte',
+      'Partidas ágeis de dedução social e cooperação incorporadas diretamente à infraestrutura de salas e chamadas de voz do ecossistema.',
+    coverImage: 'assets/real/love-letter-cover.webp',
+    tags: ['Dedução & Cartas', 'Partidas Rápidas', 'Salão MN Trono'],
+    hostPlatform: 'MN Trono',
+    playUrl: MENCORP_CONFIG.links.mnTronoMaster,
   },
   {
     id: 'future-publishing-slot',
@@ -624,7 +667,7 @@ export const INCORPORATED_GAMES_DATA: IncorporatedGameItem[] = [
     category: 'Slot Configurável',
     originNote: 'Estrutura modular preparada para expansão do catálogo',
     description:
-      'Espaço reservado na arquitetura de dados do MeNCorp para futura publicação, distribuição ou incorporação de novos jogos parceiros e experiências ao ecossistema.',
+      'Espaço reservado na arquitetura de dados do MeNCorp para futura publicação, distribuição ou incorporação de novos jogos e experiências.',
     tags: ['Arquitetura Extensível', 'Publicação MeNCorp', 'Configurável'],
     hostPlatform: 'Ecossistema MeNCorp',
     isTemplateSlot: true,
@@ -633,87 +676,87 @@ export const INCORPORATED_GAMES_DATA: IncorporatedGameItem[] = [
 
 export const TIMELINE_DATA: TimelineMilestone[] = [
   {
-    id: 'genesis',
-    period: 'Fase I · A Gênese Criativa',
+    id: 'genesis-lei-do-trono',
+    period: 'Marco I · A Faísca Criativa',
     isPeriodConfigurable: true,
-    title: 'O Nascimento de uma Visão Tecnológica e Criativa',
-    category: 'Fundação & Experimentação',
+    title: 'Jonatha Pereira e a Criação de "A Lei do Trono"',
+    category: 'Início da Jornada',
     description:
-      'O ponto de partida da trajetória MeNCorp: anos de estudo, experimentação, prototipagem e aprendizado contínuo unindo paixão por jogos, engenharia de software e criação de mundos próprios.',
+      'Em um dia qualquer, Jonatha Pereira decidiu criar um card game autoral chamado "A Lei do Trono" e desenvolveu um ambiente web próprio para conseguir testá-lo online com os amigos.',
     highlights: [
-      'Primeiros protótipos e experimentos interativos',
-      'Construção da base técnica e artística autoral',
-      'Definição da filosofia criativa da marca',
+      'Concepção original do card game estratégico A Lei do Trono',
+      'Primeira versão do ambiente web para testes de partidas online',
+      'Ponto de partida de todo o ecossistema MeNCorp',
     ],
-    visualAsset: '/assets/real/throne-cover.webp',
+    visualAsset: 'assets/real/throne-cover.webp',
     assetKind: 'real',
-    accentColor: 'violet',
-  },
-  {
-    id: 'lei-do-trono',
-    period: 'Fase II · Universo Estratégico',
-    isPeriodConfigurable: true,
-    title: 'A Lei do Trono & O Surgimento do Men Trono',
-    category: 'Plataforma Digital & Multiplayer',
-    description:
-      'Transição do universo estratégico de A Lei do Trono para o ambiente digital. Criação de uma plataforma capaz de sustentar partidas multiplayer, intriga política, alianças e um salão completo de experiências.',
-    highlights: [
-      'Digitalização das mecânicas de estratégia e política',
-      'Arquitetura cliente-servidor com WebSockets em tempo real',
-      'Expansão para aplicação Desktop (Electron) e Web',
-    ],
-    visualAsset: '/assets/concept/men-trono-concept.webp',
-    assetKind: 'concept',
     accentColor: 'gold',
   },
   {
-    id: 'menchat-community',
-    period: 'Fase III · Conexão e Comunidade',
+    id: 'escala-voz-p2p',
+    period: 'Marco II · A Escala da Plataforma',
     isPeriodConfigurable: true,
-    title: 'MenChat e a Infraestrutura de Comunicação',
-    category: 'Comunidade & Social',
+    title: 'Do Chat de Voz P2P ao Hub Completo de Jogos',
+    category: 'Comunicação & Multiplayer',
     description:
-      'Desenvolvimento de uma solução própria de comunicação para aproximar amigos e jogadores. O MenChat consolida conversas, salas, chamadas de áudio/vídeo e compartilhamento em uma experiência integrada.',
+      'Para explicar as regras do card game durante as partidas, surgiu a ideia de criar um chat de voz P2P integrado. A iniciativa escalou rapidamente para uma plataforma completa com compartilhamento de tela e múltiplos jogos.',
     highlights: [
-      'Comunicação privada e em grupo com identidade própria',
-      'Suporte a voz, vídeo, mídia e PWA mobile/desktop',
-      'Integração direta com a vivência da comunidade gamer',
+      'Implementação de chat de voz P2P direto no navegador',
+      'Compartilhamento de tela e salas de convivência em tempo real',
+      'Expansão do catálogo para abrigar diversos jogos multiplayer',
     ],
-    visualAsset: '/assets/concept/menchat-concept.webp',
+    visualAsset: 'assets/concept/men-trono-concept.webp',
     assetKind: 'concept',
     accentColor: 'violet',
   },
   {
-    id: 'mencorp-games-expansion',
-    period: 'Fase IV · O Universo Autoral MeNCorp Games',
+    id: 'refatoracao-felipe-pimentel',
+    period: 'Marco III · A Grande Virada Arquitetural',
     isPeriodConfigurable: true,
-    title: 'Cinzas do Abismo, Atalaia e Nexus',
-    category: 'Desenvolvimento de Jogos Originais',
+    title: 'Felipe Pimentel: Refatoração de Código e Novo Design',
+    category: 'Engenharia & Identidade Visual',
     description:
-      'Consolidação do braço de desenvolvimento de jogos originais com três universos distintos: a ação e sobrevivência de Cinzas do Abismo, a defesa estratégica de Atalaia: Guardiões do Cristal e o combate tático de Nexus.',
+      'Com o crescimento acelerado, o site havia se tornado uma bagunça estrutural. Foi aí que Felipe Pimentel, membro do MeNCorp, assumiu uma refatoração profunda do código e reformulou seu design inteiro.',
     highlights: [
-      'Três jogos originais com identidades visuais e mecânicas únicas',
-      'Integração dos títulos ao catálogo do ecossistema',
-      'Evolução constante de sistemas de progressão e PvP online',
+      'Reestruturação completa da base de código e arquitetura',
+      'Redesign visual sofisticado e organização da interface',
+      'Fundação técnica sólida para suportar o crescimento do projeto',
     ],
-    visualAsset: '/assets/real/nexus-online.webp',
-    assetKind: 'real',
+    visualAsset: 'assets/concept/menchat-concept.webp',
+    assetKind: 'concept',
     accentColor: 'cyan',
   },
   {
-    id: 'mencorp-ecosystem-today',
-    period: 'Presente & Futuro · Ecossistema Unificado',
-    isPeriodConfigurable: false,
-    title: 'Consolidação da Marca Institucional MeNCorp',
-    category: 'Corporação de Ideias',
+    id: 'equipe-memes-e-nerds',
+    period: 'Marco IV · A Força da Comunidade Fundadora',
+    isPeriodConfigurable: true,
+    title: 'A Equipe Primordial dos Memes e Nerds (MeN)',
+    category: 'Cultura, Testes & Evolução',
     description:
-      'Unificação das plataformas, jogos originais, títulos incorporados e canais de comunidade sob o guarda-chuva oficial do MeNCorp — estruturando o caminho para novos lançamentos e experiências.',
+      'A partir da nova estrutura, toda a equipe primordial dos Memes e Nerds passou a testar intensamente as funcionalidades, sugerindo mudanças, ajustes de regras e novos recursos.',
     highlights: [
-      'Ecossistema interconectado de produtos e jogos',
-      'Identidade institucional consolidada',
-      'Arquitetura pronta para os próximos capítulos da jornada',
+      'Ciclos constantes de testes reais em grupo',
+      'Sugestões diretas da equipe primordial Memes e Nerds',
+      'Consolidação do MN Trono e nascimento do MenChat',
     ],
-    visualAsset: '/assets/real/atalaia-gameplay.webp',
+    visualAsset: 'assets/real/nexus-lobby.webp',
+    assetKind: 'real',
+    accentColor: 'violet',
+  },
+  {
+    id: 'universo-mencorp-games',
+    period: 'Presente & Futuro · O Ecossistema MeNCorp',
+    isPeriodConfigurable: false,
+    title: 'Cinzas do Abismo, Atalaia, Nexus e a Expansão Contínua',
+    category: 'MeNCorp Games & Futuro',
+    description:
+      'Hoje, o MeNCorp reúne o MN Trono, o MenChat e três grandes universos autorais de jogos — Cinzas do Abismo, Atalaia: Guardiões do Cristal e Nexus — em evolução constante.',
+    highlights: [
+      'Três títulos originais com identidades visuais e mecânicas próprias',
+      'Acesso integrado através do link master a-lei-do-trono.surge.sh',
+      'Novas experiências e projetos em contínuo desenvolvimento',
+    ],
+    visualAsset: 'assets/real/nexus-online.webp',
     assetKind: 'real',
     accentColor: 'gold',
   },
@@ -727,7 +770,7 @@ export const ECOSYSTEM_DOMAINS: EcosystemDomain[] = [
     subtitle: 'Infraestrutura & Ambientes',
     description:
       'Sustenta o acesso unificado às aplicações web, desktop e mobile, conectando contas, salas multiplayer, atualizações e catálogos.',
-    connectedProjects: ['Men Trono', 'A Corte (Web & Desktop)', 'Hub de Catálogo'],
+    connectedProjects: ['MN Trono (Link Master)', 'A Lei do Trono Online', 'Hub de Catálogo'],
     accentColor: '#f59e0b',
     coordinates: { x: 18, y: 24 },
   },
@@ -737,8 +780,8 @@ export const ECOSYSTEM_DOMAINS: EcosystemDomain[] = [
     shortTitle: 'Comunicação',
     subtitle: 'Conexão Humana em Tempo Real',
     description:
-      'Integra jogadores e membros através de chat, chamadas de áudio e vídeo, compartilhamento de tela e salas sociais.',
-    connectedProjects: ['MenChat', 'Salas de Voz & Vídeo', 'Canais da Comunidade'],
+      'Integra jogadores e a equipe Memes e Nerds através de voz P2P, compartilhamento de tela, MenChat e salas sociais.',
+    connectedProjects: ['Voz P2P & Tela no MN Trono', 'MenChat', 'Comunidade Memes e Nerds'],
     accentColor: '#a855f7',
     coordinates: { x: 82, y: 24 },
   },
@@ -748,7 +791,7 @@ export const ECOSYSTEM_DOMAINS: EcosystemDomain[] = [
     shortTitle: 'MeNCorp Games',
     subtitle: 'Criação Autoral de Universos',
     description:
-      'Núcleo criativo dedicado ao design, engenharia e direção artística dos títulos originais desenvolvidos internamente.',
+      'Núcleo criativo dedicado ao design, engenharia e direção artística dos títulos originais desenvolvidos pelo MeNCorp.',
     connectedProjects: [
       'Cinzas do Abismo',
       'Atalaia: Guardiões do Cristal',
@@ -763,10 +806,10 @@ export const ECOSYSTEM_DOMAINS: EcosystemDomain[] = [
     shortTitle: 'Publicação & Catálogo',
     subtitle: 'Curadoria e Incorporação',
     description:
-      'Distribuição e adaptação de experiências e jogos de tabuleiro digitais incorporados aos salões multiplayer do ecossistema.',
+      'Distribuição e adaptação de experiências e jogos de tabuleiro digitais incorporados aos salões multiplayer do MN Trono.',
     connectedProjects: [
-      'Catálogo Integrado A Corte',
-      'Adaptações Digitais Multiplayer',
+      'Splendor & Azul no Trono',
+      'Ticket to Ride, Love Letter & Similo',
       'Distribuição Web & Desktop',
     ],
     accentColor: '#ec4899',
@@ -791,6 +834,32 @@ export const ECOSYSTEM_DOMAINS: EcosystemDomain[] = [
 
 export const ROADMAP_INITIATIVES: RoadmapInitiative[] = [
   {
+    id: 'mn-trono-master',
+    title: 'MN Trono · App de Comunicação & Hub de Jogos',
+    area: 'Plataforma Master & Voz P2P',
+    status: 'Disponível',
+    description:
+      'Nosso aplicativo principal de comunicação por voz P2P, compartilhamento de tela e salão multiplayer com A Lei do Trono e catálogo completo.',
+    focusPoints: [
+      'Acesso direto em a-lei-do-trono.surge.sh',
+      'Chat de voz P2P e compartilhamento de tela integrados',
+      'Salões multiplayer com múltiplos jogos ativos',
+    ],
+  },
+  {
+    id: 'atalaia-web-release',
+    title: 'Atalaia: Guardiões do Cristal · Edição Web & Trono',
+    area: 'MeNCorp Games',
+    status: 'Disponível',
+    description:
+      'Defesa estratégica do Cristal com seis doutrinas de torretas, análise de dano em tempo real e acesso direto no navegador.',
+    focusPoints: [
+      'Versão web jogável em atalaia-mn.surge.sh',
+      'Sistema de doutrinas e ondas de chefes',
+      'Integração nativa ao ecossistema MN Trono',
+    ],
+  },
+  {
     id: 'menchat-platform',
     title: 'MenChat · Experiência Web & Mobile PWA',
     area: 'Plataforma de Comunicação',
@@ -798,48 +867,22 @@ export const ROADMAP_INITIATIVES: RoadmapInitiative[] = [
     description:
       'Comunicação privada e comunitária com salas, mídia rica, voz e instalação direta em dispositivos móveis e desktop.',
     focusPoints: [
-      'Acesso web publicado e funcional',
+      'Acesso publicado em men-chat.vercel.app',
       'Suporte a grupos, mídia e chamadas',
       'Aprimoramento contínuo de notificações e performance',
     ],
   },
   {
-    id: 'atalaia-web-release',
-    title: 'Atalaia: Guardiões do Cristal · Edição Web & Catálogo',
-    area: 'MeNCorp Games',
-    status: 'Disponível',
-    description:
-      'Defesa estratégica do Cristal com seis doutrinas de torretas, análise de dano em tempo real e integração direta com A Corte.',
-    focusPoints: [
-      'Versão web jogável publicada',
-      'Sistema de doutrinas e ondas de chefes',
-      'Integração nativa ao ecossistema Men Trono',
-    ],
-  },
-  {
-    id: 'men-trono-ecosystem',
-    title: 'Men Trono & A Corte · Expansão Multiplataforma',
-    area: 'Plataforma Digital & Multiplayer',
-    status: 'Em evolução',
-    description:
-      'Aprimoramento contínuo da plataforma estratégica de A Lei do Trono, unificando comunicação, salões de jogos e experiência mobile.',
-    focusPoints: [
-      'Evolução das partidas estratégicas multiplayer',
-      'Integração entre Desktop (Electron), Web e Android',
-      'Expansão do catálogo de experiências conectadas',
-    ],
-  },
-  {
     id: 'cinzas-do-abismo-evolution',
-    title: 'Cinzas do Abismo · Expansão de Regiões e Cartas',
+    title: 'Cinzas do Abismo · Expedição & Horda Sem Fim',
     area: 'MeNCorp Games',
     status: 'Em evolução',
     description:
-      'Ampliação dos capítulos de expedição, novas sinergias elementais, equipamentos e desafios do modo Horda sem fim.',
+      'Ação e sobrevivência roguelite jogável diretamente no ecossistema, com ampliação contínua de capítulos, cartas elementais e chefes.',
     focusPoints: [
-      'Novas combinações de armas e cartas elementais',
-      'Refinamento de combate, chefes e terrenos dinâmicos',
-      'Progressão persistente de campanha e recordes',
+      'Demo jogável disponível no ecossistema MN Trono',
+      'Combinações de armas e 4 elementos (Fogo, Gelo, Raio, Veneno)',
+      'Progressão persistente de campanha e recordes de horda',
     ],
   },
   {
@@ -848,9 +891,9 @@ export const ROADMAP_INITIATIVES: RoadmapInitiative[] = [
     area: 'MeNCorp Games',
     status: 'Em desenvolvimento',
     description:
-      'Desenvolvimento do RPG tático em turnos com elenco de 20 heróis, cinco afinidades, oficina de gemas e batalhas online autoritativas.',
+      'RPG tático em turnos com elenco de 20 heróis, cinco afinidades, oficina de gemas e batalhas online.',
     focusPoints: [
-      'Balanceamento de classes, habilidades e sinergias de trio',
+      'Página jogável publicada e integrada ao Trono',
       'Infraestrutura de salas PvP online em tempo real',
       'Expansão dos capítulos e missões no universo do Sanctum',
     ],
@@ -861,7 +904,7 @@ export const ROADMAP_INITIATIVES: RoadmapInitiative[] = [
     area: 'Inovação & Ecossistema',
     status: 'Em planejamento',
     description:
-      'Planejamento de novas propriedades intelectuais, recursos sociais integrados e ampliação da frente de publicação de projetos.',
+      'Planejamento de novas propriedades intelectuais, recursos sociais integrados e ampliação da frente de publicação junto à equipe Memes e Nerds.',
     focusPoints: [
       'Concepção de novos protótipos e experiências interativas',
       'Ferramentas unificadas para a comunidade MeNCorp',
@@ -872,13 +915,22 @@ export const ROADMAP_INITIATIVES: RoadmapInitiative[] = [
 
 export const COMMUNITY_CHANNELS: ConfigurableLink[] = [
   {
+    id: 'mn-trono',
+    label: 'MN Trono · App de Comunicação',
+    url: MENCORP_CONFIG.links.mnTronoMaster,
+    configKey: 'MENCORP_CONFIG.links.mnTronoMaster',
+    description:
+      'Nosso ponto de encontro oficial: entre nas salas de voz P2P, compartilhe tela e jogue com a comunidade Memes e Nerds.',
+    badge: 'App Oficial & Jogos',
+  },
+  {
     id: 'discord',
     label: 'Discord Oficial',
     url: MENCORP_CONFIG.links.discordInvite,
     configKey: 'MENCORP_CONFIG.links.discordInvite',
     description:
-      'Ponto de encontro para jogadores, testes de novas versões, formação de partidas e conversa direta com a comunidade.',
-    badge: 'Comunidade & Partidas',
+      'Espaço complementar para avisos, organização de partidas, testes de novas versões e conversa com a comunidade.',
+    badge: 'Comunidade',
   },
   {
     id: 'youtube',
@@ -890,21 +942,12 @@ export const COMMUNITY_CHANNELS: ConfigurableLink[] = [
     badge: 'Vídeos & Devlogs',
   },
   {
-    id: 'social',
-    label: 'Redes Sociais & GitHub',
-    url: MENCORP_CONFIG.links.githubOrg,
-    configKey: 'MENCORP_CONFIG.links.githubOrg',
-    description:
-      'Acompanhe os repositórios oficiais, atualizações técnicas, releases públicas e novidades do ecossistema MeNCorp.',
-    badge: 'Repositórios & Novidades',
-  },
-  {
     id: 'contact',
     label: 'Contato Institucional',
     url: MENCORP_CONFIG.links.contactEmail,
     configKey: 'MENCORP_CONFIG.links.contactEmail',
     description:
-      'Canal direto para parcerias criativas, imprensa, feedback sobre projetos ou assuntos institucionais.',
+      'Canal direto para parcerias criativas, sugestões de novos recursos ou assuntos institucionais do MeNCorp.',
     badge: 'Canal Direto',
   },
 ];

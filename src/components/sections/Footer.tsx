@@ -10,11 +10,10 @@ interface FooterProps {
 const CURRENT_YEAR = new Date().getFullYear();
 
 export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
-
   return (
     <footer
       aria-label="Rodapé institucional MeNCorp"
-      className="relative bg-[#040408] border-t border-white/10 pt-16 pb-12 overflow-hidden"
+      className="relative bg-[#040408]/95 border-t border-white/10 pt-16 pb-12 overflow-hidden"
     >
       {/* Subtle Top Luminous Divider */}
       <div
@@ -66,20 +65,22 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
             </ul>
           </div>
 
-          {/* Column 2: Projetos & Plataformas (2 cols) */}
+          {/* Column 2: Plataformas & Apps (2 cols) */}
           <div className="lg:col-span-2">
             <h3 className="text-xs font-mono uppercase tracking-widest text-white mb-4">
-              Projetos
+              Plataformas
             </h3>
             <ul className="space-y-2.5 text-sm text-zinc-400">
               <li>
-                <button
-                  type="button"
-                  onClick={() => onNavigate('plataformas')}
-                  className="hover:text-amber-300 transition-colors text-left"
+                <a
+                  href={MENCORP_CONFIG.links.mnTronoMaster}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 hover:text-amber-300 transition-colors"
                 >
-                  Men Trono (A Lei do Trono)
-                </button>
+                  <span>MN Trono (Link Master)</span>
+                  <ExternalLink className="w-3 h-3" />
+                </a>
               </li>
               <li>
                 <a
@@ -93,15 +94,13 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                 </a>
               </li>
               <li>
-                <a
-                  href={MENCORP_CONFIG.links.menTronoDownloads}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 hover:text-violet-300 transition-colors"
+                <button
+                  type="button"
+                  onClick={() => onNavigate('plataformas')}
+                  className="hover:text-violet-300 transition-colors text-left"
                 >
-                  <span>Men Trono Releases</span>
-                  <ExternalLink className="w-3 h-3" />
-                </a>
+                  Detalhes das Plataformas
+                </button>
               </li>
             </ul>
           </div>
@@ -113,13 +112,15 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
             </h3>
             <ul className="space-y-2.5 text-sm text-zinc-400">
               <li>
-                <button
-                  type="button"
-                  onClick={() => onNavigate('games')}
-                  className="hover:text-orange-300 transition-colors text-left"
+                <a
+                  href={MENCORP_CONFIG.links.cinzasLive}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 hover:text-orange-300 transition-colors"
                 >
-                  Cinzas do Abismo
-                </button>
+                  <span>Cinzas do Abismo</span>
+                  <ExternalLink className="w-3 h-3" />
+                </a>
               </li>
               <li>
                 <a
@@ -134,7 +135,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
               </li>
               <li>
                 <a
-                  href={MENCORP_CONFIG.links.nexusRepo}
+                  href={MENCORP_CONFIG.links.nexusLive}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-1.5 hover:text-purple-300 transition-colors"
@@ -144,23 +145,36 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                 </a>
               </li>
               <li>
-                <button
-                  type="button"
-                  onClick={() => onNavigate('games')}
-                  className="hover:text-zinc-200 transition-colors text-left"
+                <a
+                  href={MENCORP_CONFIG.links.mnTronoMaster}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 hover:text-amber-300 transition-colors"
                 >
-                  Catálogo Incorporado
-                </button>
+                  <span>A Lei do Trono &amp; Salão</span>
+                  <ExternalLink className="w-3 h-3" />
+                </a>
               </li>
             </ul>
           </div>
 
-          {/* Column 4: Comunidade, Contato & Redes Sociais (2 cols) */}
+          {/* Column 4: Comunidade & Contato (2 cols) */}
           <div className="lg:col-span-2">
             <h3 className="text-xs font-mono uppercase tracking-widest text-white mb-4">
               Comunidade &amp; Contato
             </h3>
             <ul className="space-y-2.5 text-sm text-zinc-400">
+              <li>
+                <a
+                  href={MENCORP_CONFIG.links.mnTronoMaster}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 hover:text-amber-300 transition-colors"
+                >
+                  <span>Salas de Voz P2P (Trono)</span>
+                  <ExternalLink className="w-3 h-3" />
+                </a>
+              </li>
               <li>
                 <button
                   type="button"
@@ -176,7 +190,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                   onClick={() => onNavigate('comunidade')}
                   className="hover:text-violet-300 transition-colors text-left"
                 >
-                  YouTube &amp; Redes Sociais
+                  YouTube &amp; Vídeos
                 </button>
               </li>
               <li>
@@ -187,17 +201,6 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                 >
                   Contato Institucional
                 </button>
-              </li>
-              <li>
-                <a
-                  href={MENCORP_CONFIG.links.githubOrg}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 hover:text-white transition-colors"
-                >
-                  <span>GitHub Oficial</span>
-                  <ExternalLink className="w-3 h-3" />
-                </a>
               </li>
             </ul>
           </div>

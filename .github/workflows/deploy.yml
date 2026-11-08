@@ -1,0 +1,68 @@
+name: Deploy MeNCorp (Surge & GitHub Pages)
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      surge_domain:
+        description: 'Domínio do Surge (padrão: mencorp.surge.sh)'
+        required: false
+        default: 'mencorp.surge.sh'
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: 'mencorp-deploy'
+  cancel-in-progress: true
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build production bundle
+        run: |
+          npm run build
+          cp dist/index.html dist/200.html
+
+      - name: Publish to Surge.sh (when SURGE_TOKEN is configured)
+        env:
+          SURGE_TOKEN: ${{ secrets.SURGE_TOKEN }}
+          SURGE_DOMAIN: ${{ inputs.surge_domain || 'mencorp.surge.sh' }}
+        run: |
+          if [ -n "$SURGE_TOKEN" ]; then
+            echo "Publicando no Surge em https://$SURGE_DOMAIN ..."
+            npx --yes surge@0.46.0 ./dist "$SURGE_DOMAIN" --token "$SURGE_TOKEN"
+          else
+            echo "::notice::Secret SURGE_TOKEN ainda não configurado neste repositório. Pulando etapa do Surge e publicando no GitHub Pages."
+          fi
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact for GitHub Pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: './dist'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

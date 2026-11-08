@@ -21,14 +21,15 @@ interface HeroSectionProps {
 const HERO_SHOWCASE_UNIVERSES = [
   {
     id: 'men-trono',
-    tag: 'PLATAFORMA ESTRATÉGICA',
-    title: 'Men Trono · A Lei do Trono',
-    subtitle: 'Estratégia, política, alianças e disputas multiplayer pelo poder.',
-    image: '/assets/real/throne-cover.webp',
+    tag: 'APP DE COMUNICAÇÃO & JOGOS',
+    title: 'MN Trono · A Lei do Trono',
+    subtitle: 'Chat de voz P2P, compartilhamento de tela, alianças e vários jogos online.',
+    image: 'assets/real/throne-cover.webp',
     accent: 'from-amber-500/30 via-violet-900/30 to-obsidian-950',
     border: 'border-amber-400/40',
     badge: 'text-amber-300 bg-amber-500/15 border-amber-400/30',
     targetSection: 'plataformas',
+    liveUrl: MENCORP_CONFIG.links.mnTronoMaster,
     icon: Shield,
   },
   {
@@ -36,11 +37,12 @@ const HERO_SHOWCASE_UNIVERSES = [
     tag: 'MENCORP GAMES · AÇÃO & SOBREVIVÊNCIA',
     title: 'Cinzas do Abismo',
     subtitle: 'Combate intenso, arsenal evolutivo e sobrevivência em um mundo hostil.',
-    image: '/assets/real/cinzas-cover.webp',
+    image: 'assets/real/cinzas-cover.webp',
     accent: 'from-orange-600/30 via-red-950/30 to-obsidian-950',
     border: 'border-orange-400/40',
     badge: 'text-orange-300 bg-orange-500/15 border-orange-400/30',
     targetSection: 'games',
+    liveUrl: MENCORP_CONFIG.links.cinzasLive,
     icon: Swords,
   },
   {
@@ -48,11 +50,12 @@ const HERO_SHOWCASE_UNIVERSES = [
     tag: 'MENCORP GAMES · TOWER DEFENSE',
     title: 'Atalaia: Guardiões do Cristal',
     subtitle: 'Defesa estratégica do Cristal, doutrinas de torres e evolução contínua.',
-    image: '/assets/real/atalaia-gameplay.webp',
+    image: 'assets/real/atalaia-gameplay.webp',
     accent: 'from-sky-500/30 via-amber-900/20 to-obsidian-950',
     border: 'border-sky-400/40',
     badge: 'text-sky-300 bg-sky-500/15 border-sky-400/30',
     targetSection: 'games',
+    liveUrl: MENCORP_CONFIG.links.atalaiaLive,
     icon: Sparkles,
   },
   {
@@ -60,11 +63,12 @@ const HERO_SHOWCASE_UNIVERSES = [
     tag: 'MENCORP GAMES · RPG TÁTICO',
     title: 'NEXUS · Ecos do Crepúsculo',
     subtitle: 'Classes, sinergias de equipe, oficina de gemas e batalhas estratégicas.',
-    image: '/assets/real/nexus-cover.webp',
+    image: 'assets/real/nexus-cover.webp',
     accent: 'from-purple-500/30 via-cyan-950/30 to-obsidian-950',
     border: 'border-purple-400/40',
     badge: 'text-purple-200 bg-purple-500/15 border-purple-400/30',
     targetSection: 'games',
+    liveUrl: MENCORP_CONFIG.links.nexusLive,
     icon: Gamepad2,
   },
   {
@@ -72,11 +76,12 @@ const HERO_SHOWCASE_UNIVERSES = [
     tag: 'COMUNIDADE & COMUNICAÇÃO',
     title: 'MenChat',
     subtitle: 'Conversas, salas, chamadas de áudio e vídeo integradas ao ecossistema.',
-    image: '/assets/concept/menchat-concept.webp',
+    image: 'assets/concept/menchat-concept.webp',
     accent: 'from-violet-600/30 via-fuchsia-950/30 to-obsidian-950',
     border: 'border-violet-400/40',
     badge: 'text-violet-200 bg-violet-500/15 border-violet-400/30',
     targetSection: 'plataformas',
+    liveUrl: MENCORP_CONFIG.links.menChatLive,
     icon: MessageSquare,
   },
 ];
@@ -269,14 +274,25 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onNavigate }) => {
                     <p className="text-xs sm:text-sm text-zinc-300 line-clamp-2 mb-4">
                       {activeUniverse.subtitle}
                     </p>
-                    <button
-                      type="button"
-                      onClick={() => onNavigate(activeUniverse.targetSection)}
-                      className="inline-flex items-center gap-1.5 text-xs font-mono uppercase tracking-wider text-amber-300 hover:text-amber-200 transition-colors"
-                    >
-                      <span>Inspecionar no ecossistema</span>
-                      <ChevronRight className="w-3.5 h-3.5" />
-                    </button>
+                    <div className="flex flex-wrap items-center gap-4">
+                      <a
+                        href={activeUniverse.liveUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-mono uppercase tracking-wider bg-amber-400 text-slate-950 font-semibold hover:bg-amber-300 transition-colors"
+                      >
+                        <span>Abrir Página Oficial</span>
+                        <ChevronRight className="w-3.5 h-3.5" />
+                      </a>
+                      <button
+                        type="button"
+                        onClick={() => onNavigate(activeUniverse.targetSection)}
+                        className="inline-flex items-center gap-1 text-xs font-mono uppercase tracking-wider text-violet-200 hover:text-white transition-colors"
+                      >
+                        <span>Ver na página</span>
+                        <ChevronRight className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
                   </div>
                 </div>
 
